@@ -29,56 +29,30 @@
 html,body{height:100%}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--txt);background:#fff}
 
-/* ===== TOP BAR ===== */
-.topbar{
-  height:var(--top-h);background:linear-gradient(90deg,#072e2d,#0c3b39);
-  display:flex;align-items:center;gap:14px;padding:0 18px;color:#fff;
-  position:sticky;top:0;z-index:20;
-}
+.topbar{height:var(--top-h);background:linear-gradient(90deg,#072e2d,#0c3b39);display:flex;align-items:center;gap:14px;padding:0 18px;color:#fff;position:sticky;top:0;z-index:20}
 .tb-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-.3px}
-.tb-logo .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--coral),var(--coral-2));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(241,90,67,.4)}
+.tb-logo .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--coral),var(--coral-2));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(99,102,241,.4)}
 .tb-sep{width:1px;height:20px;background:rgba(255,255,255,.25)}
-.tb-sub{font-size:12px;color:#9DBdBb;font-weight:500;letter-spacing:.3px}
+.tb-sub{font-size:12px;color:#9DBDBB;font-weight:500;letter-spacing:.3px}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:#8FB3B0;font-weight:500}
 .tb-right .d{width:7px;height:7px;border-radius:50%;background:#34D399;box-shadow:0 0 0 3px rgba(52,211,153,.2)}
 
-/* ===== SHELL ===== */
 .shell{display:flex;height:calc(100vh - var(--top-h))}
 
-/* ===== ICON RAIL (setores) ===== */
-.rail{
-  width:var(--rail-w);flex-shrink:0;background:linear-gradient(180deg,var(--rail-top),var(--rail-bot));
-  display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;overflow-y:auto;
-}
-.rail a{
-  width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
-  color:#7FA7A4;text-decoration:none;transition:.15s;position:relative;
-}
+.rail{width:var(--rail-w);flex-shrink:0;background:linear-gradient(180deg,var(--rail-top),var(--rail-bot));display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;overflow-y:auto}
+.rail a{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#7FA7A4;text-decoration:none;transition:.15s;position:relative}
 .rail a:hover{background:rgba(255,255,255,.07);color:#fff}
-.rail a.active{background:linear-gradient(135deg,var(--coral),var(--coral-2));color:#fff;box-shadow:0 6px 16px rgba(241,90,67,.45)}
-.rail a .tip{
-  position:absolute;left:58px;top:50%;transform:translateY(-50%) scale(.96);
-  background:#0f172a;color:#fff;font-size:11.5px;font-weight:600;white-space:nowrap;
-  padding:6px 10px;border-radius:7px;opacity:0;pointer-events:none;transition:.12s;z-index:30;
-}
+.rail a.active{background:linear-gradient(135deg,var(--coral),var(--coral-2));color:#fff;box-shadow:0 6px 16px rgba(99,102,241,.45)}
+.rail a .tip{position:absolute;left:58px;top:50%;transform:translateY(-50%) scale(.96);background:#0f172a;color:#fff;font-size:11.5px;font-weight:600;white-space:nowrap;padding:6px 10px;border-radius:7px;opacity:0;pointer-events:none;transition:.12s;z-index:30}
 .rail a:hover .tip{opacity:1;transform:translateY(-50%) scale(1)}
 .rail .rail-sep{width:30px;height:1px;background:rgba(255,255,255,.1);margin:6px 0}
 
-/* ===== LIST COLUMN (menu lateral de automações) ===== */
-.list{
-  width:var(--list-w);flex-shrink:0;background:#fff;border-right:1px solid var(--line);
-  overflow-y:auto;padding:26px 22px 30px;
-}
+.list{width:var(--list-w);flex-shrink:0;background:#fff;border-right:1px solid var(--line);overflow-y:auto;padding:26px 22px 30px}
 .list h1{font-size:21px;font-weight:800;color:var(--maroon);letter-spacing:-.4px;margin-bottom:4px}
 .list .h-sub{font-size:12.5px;color:var(--txt-soft);margin-bottom:22px;line-height:1.5}
-.opt{
-  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
-  background:#fff;border:1px solid var(--line);border-radius:11px;
-  padding:14px 14px;margin-bottom:11px;cursor:pointer;font-family:inherit;
-  transition:.16s;position:relative;
-}
-.opt:hover{border-color:var(--coral);box-shadow:0 6px 18px rgba(241,90,67,.10);transform:translateY(-1px)}
-.opt.active{border-color:var(--coral);background:#fff;box-shadow:0 8px 22px rgba(241,90,67,.16)}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 14px;margin-bottom:11px;cursor:pointer;font-family:inherit;transition:.16s;position:relative}
+.opt:hover{border-color:var(--coral);box-shadow:0 6px 18px rgba(99,102,241,.10);transform:translateY(-1px)}
+.opt.active{border-color:var(--coral);background:#fff;box-shadow:0 8px 22px rgba(99,102,241,.16)}
 .opt.active::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:var(--coral)}
 .opt .ic{width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--maroon-soft)}
 .opt .ic svg{stroke:var(--maroon)}
@@ -91,10 +65,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 .opt .st.on{background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.16)}
 .opt .st.off{background:#CBD5E1}
 
-/* ===== CONTENT ===== */
-.content{flex:1;min-width:0;background:#F7F8FA;overflow-y:auto;padding:30px 34px}
+.content{flex:1;min-width:0;background:#F7F8FA;overflow-y:auto;padding:30px 34px;display:flex;flex-direction:column}
 .panel{display:none;animation:fade .24s ease}
-.panel.show{display:block}
+.panel.show{display:flex;flex-direction:column;flex:1;min-height:0}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .p-head{margin-bottom:22px}
@@ -102,46 +75,40 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 .p-title{font-size:24px;font-weight:800;letter-spacing:-.5px;color:var(--maroon);margin-bottom:6px}
 .p-sub{font-size:14px;color:var(--txt-soft);line-height:1.6;max-width:640px}
 
-/* welcome */
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;min-height:60vh;color:var(--txt-mute)}
 .welcome .big{width:78px;height:78px;border-radius:22px;background:var(--maroon-soft);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
 .welcome h2{font-size:20px;font-weight:800;color:var(--maroon);margin-bottom:8px}
 .welcome p{font-size:14px;max-width:340px;line-height:1.7}
 
-/* iframe */
-.embed-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.05);height:calc(100vh - 140px);min-height:520px;display:flex;flex-direction:column}
+.embed-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.05);flex:1;min-height:0;display:flex;flex-direction:column}
 .embed-max{font-size:12px;font-weight:600;color:var(--coral);background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;margin-right:14px}
 body.maxed .topbar,body.maxed .list,body.maxed .p-head{display:none}
 body.maxed .content{padding:0}
-body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important;min-height:0;border:none;border-radius:0}
+body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important;border:none;border-radius:0}
 .embed-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;border-bottom:1px solid var(--line);background:#FAFBFC}
 .embed-bar .u{font-size:12px;color:var(--txt-mute);display:flex;align-items:center;gap:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .embed-open{font-size:12px;font-weight:600;color:var(--coral);text-decoration:none;display:inline-flex;align-items:center;gap:6px;flex-shrink:0}
 .embed-wrap iframe{flex:1;width:100%;border:none;background:#fff}
 
-/* action card */
 .act-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;max-width:520px;box-shadow:0 8px 30px rgba(0,0,0,.05);position:relative;overflow:hidden}
-.act-ico{width:54px;height:54px;border-radius:15px;background:linear-gradient(135deg,var(--coral),var(--coral-2));box-shadow:0 6px 16px rgba(241,90,67,.32);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.act-ico{width:54px;height:54px;border-radius:15px;background:linear-gradient(135deg,var(--coral),var(--coral-2));box-shadow:0 6px 16px rgba(99,102,241,.32);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
 .act-card h3{font-size:18px;font-weight:700;color:var(--maroon);margin-bottom:7px}
 .act-card .d{font-size:13px;color:var(--txt-soft);line-height:1.7;margin-bottom:22px}
 .act-meta{display:flex;gap:24px;padding:16px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);margin-bottom:22px}
 .act-meta div{display:flex;align-items:center;gap:7px;font-size:12px}
 .act-meta .lbl{color:var(--txt-soft);font-weight:600}.act-meta .val{font-weight:700}
-.act-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;background:linear-gradient(135deg,var(--coral),var(--coral-2));color:#fff;border:none;border-radius:13px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 6px 20px rgba(241,90,67,.4);transition:.2s}
-.act-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(241,90,67,.5)}
+.act-btn{width:100%;max-width:520px;display:flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;background:linear-gradient(135deg,var(--coral),var(--coral-2));color:#fff;border:none;border-radius:13px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 6px 20px rgba(99,102,241,.4);transition:.2s}
+.act-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(99,102,241,.5)}
 .act-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.act-status{margin-top:15px;font-size:13px;text-align:center;min-height:18px;font-weight:600}
+.act-status{margin-top:15px;font-size:13px;min-height:18px;font-weight:600}
 .act-status.ok{color:#059669}.act-status.err{color:#DC2626}.act-status.run{color:var(--coral)}
 
-/* dev */
-.dev{background:#fff;border:1px dashed #CBD5E1;border-radius:18px;padding:54px 34px;text-align:center;max-width:560px;margin:20px auto 0}
+.dev{background:#fff;border:1px dashed #CBD5E1;border-radius:18px;padding:54px 34px;text-align:center;max-width:560px}
 .dev .ico{width:62px;height:62px;border-radius:17px;background:#FFF3E0;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
 .dev h3{font-size:19px;font-weight:800;color:var(--maroon);margin-bottom:8px}
 .dev p{font-size:14px;color:var(--txt-soft);line-height:1.7;max-width:380px;margin:0 auto}
 
-@media (max-width:980px){
-  .list{width:280px}
-}
+@media (max-width:980px){ .list{width:280px} }
 @media (max-width:760px){
   .shell{flex-direction:column;height:auto}
   .rail{width:100%;flex-direction:row;justify-content:flex-start;overflow-x:auto;padding:10px}
@@ -150,29 +117,22 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
   .content{min-height:60vh}
 }
 
-/* ===== quando carregado dentro da moldura (index.html), esconde topbar/rail próprios ===== */
+/* dentro da moldura (index.html): esconde topbar/rail próprios */
 .embedded .topbar,.embedded .rail{display:none!important}
 .embedded .shell{height:100vh!important}
-.embedded .embed-wrap{min-height:0!important}
 </style>
 <script>if(window.self!==window.top)document.documentElement.classList.add('embedded');</script>
 </head>
 <body>
 
-<!-- ===== TOP BAR ===== -->
 <header class="topbar">
-  <div class="tb-logo">
-    <span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
-    SILLION
-  </div>
+  <div class="tb-logo"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> SILLION</div>
   <span class="tb-sep"></span>
   <span class="tb-sub">Portal de Automações</span>
   <div class="tb-right"><span class="d"></span> Online</div>
 </header>
 
 <div class="shell">
-
-  <!-- ===== ICON RAIL: setores ===== -->
   <nav class="rail">
     <a href="index.html" title="Início"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="tip">Início</span></a>
     <span class="rail-sep"></span>
@@ -180,10 +140,8 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
     <a href="fiscal.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="tip">Fiscal</span></a>
     <a href="faturamento.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><path d="M9 14h6"/></svg><span class="tip">Faturamento</span></a>
     <a href="departamento_pessoal.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><span class="tip">Departamento Pessoal</span></a>
-    <a href="#" style="opacity:.5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg><span class="tip">Contabilidade (em breve)</span></a>
   </nav>
 
-  <!-- ===== LISTA DE AUTOMAÇÕES (menu lateral) ===== -->
   <aside class="list" id="list">
     <h1>Financeiro</h1>
     <p class="h-sub">Selecione uma automação. O conteúdo abre ao lado, sem sair desta tela.</p>
@@ -219,10 +177,8 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
     </button>
   </aside>
 
-  <!-- ===== CONTEÚDO ===== -->
   <main class="content">
 
-    <!-- WELCOME -->
     <section class="panel show" id="welcome">
       <div class="welcome">
         <div class="big"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.9"><path d="M9 18l6-6-6-6"/></svg></div>
@@ -231,7 +187,6 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
       </div>
     </section>
 
-    <!-- LANÇAMENTOS -->
     <section class="panel" id="lancamentos">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Lançamentos · Contas a Pagar</h1><p class="p-sub">Dispara o workflow para processar o e-mail que ficou travado.</p></div>
       <div class="act-card">
@@ -247,7 +202,6 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
       </div>
     </section>
 
-    <!-- CARTÕES -->
     <section class="panel" id="cartoes">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Coletar dados · Cartões de Crédito</h1><p class="p-sub">Coleta e consolida os dados de faturas de todos os cartões corporativos.</p></div>
       <div class="embed-wrap">
@@ -256,13 +210,11 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
       </div>
     </section>
 
-    <!-- PROCESSAR FATURAS -->
     <section class="panel" id="faturas">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Processar faturas · Operadoras</h1><p class="p-sub">Extrai todos os dados das faturas das operadoras.</p></div>
       <div class="dev"><div class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><h3>Em desenvolvimento</h3><p>Esta automação ainda está sendo construída. Em breve aparecerá aqui, embutida nesta mesma área.</p></div>
     </section>
 
-    <!-- FLUXO -->
     <section class="panel" id="fluxo">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Fluxo de Caixa</h1><p class="p-sub">Processa o razão disponibilidades e atualiza a planilha de fluxo de caixa.</p></div>
       <div class="act-card">
@@ -278,7 +230,6 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
       </div>
     </section>
 
-    <!-- BAIXAS -->
     <section class="panel" id="baixas">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Baixas Recebimento</h1><p class="p-sub">Automatiza o processo de baixa dos recebimentos Vale.</p></div>
       <div class="embed-wrap">
@@ -291,13 +242,39 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
 </div>
 
 <script>
-/* ===== CONFIG: endpoint do servidor KVM4 (POST WEBHOOK_BASE/acao) ===== */
 const WEBHOOK_BASE = "https://SEU-SERVIDOR-KVM4/webhook";
 
-/* avisa a moldura (index.html) qual setor está aberto */
 try{ parent.postMessage({type:'portal-nav', page:'financeiro', color:'#6366F1'}, '*'); }catch(e){}
 
-/* expandir o app embutido em tela cheia dentro do portal */
 function toggleMax(b){const on=document.body.classList.toggle('maxed');b.textContent=on?'Recolher ⤡':'Expandir ⤢';}
 
-const list  = document.getElement
+const list  = document.getElementById('list');
+const opts  = [...list.querySelectorAll('.opt')];
+const panels= [...document.querySelectorAll('.panel')];
+
+function activate(target){
+  opts.forEach(o=>o.classList.toggle('active', o.dataset.target===target));
+  panels.forEach(p=>p.classList.toggle('show', p.id===target));
+  const pan = document.getElementById(target);
+  const ifr = pan && pan.querySelector('iframe[data-src]');
+  if(ifr && !ifr.src) ifr.src = ifr.dataset.src;
+  document.querySelector('.content').scrollTo(0,0);
+}
+list.addEventListener('click', e=>{
+  const b = e.target.closest('.opt'); if(b) activate(b.dataset.target);
+});
+
+async function runWebhook(acao, btnId, stId){
+  const btn=document.getElementById(btnId), st=document.getElementById(stId);
+  btn.disabled=true; st.className='act-status run'; st.textContent='Executando…';
+  try{
+    const r=await fetch(`${WEBHOOK_BASE}/${acao}`,{method:'POST'});
+    if(!r.ok) throw new Error(r.status);
+    st.className='act-status ok'; st.textContent='✓ Disparado com sucesso.';
+  }catch(err){
+    st.className='act-status err'; st.textContent='✕ Falha ao disparar (configure WEBHOOK_BASE no código).';
+  }finally{ setTimeout(()=>btn.disabled=false,1200); }
+}
+</script>
+</body>
+</html>
