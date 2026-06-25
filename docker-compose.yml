@@ -1,0 +1,14 @@
+# Portal de Automações Sillion — serve os arquivos HTML estáticos via nginx.
+# As automações continuam cada uma no seu próprio container Streamlit.
+# Suba com:  docker compose up -d
+# Acesse em: http://IP-DO-KVM4/      (porta 80)
+
+services:
+  portal:
+    image: nginx:alpine
+    container_name: sillion-portal
+    ports:
+      - "80:80"                       # troque para "8080:80" se a 80 já estiver em uso
+    volumes:
+      - ./:/usr/share/nginx/html:ro   # serve a pasta atual (index.html, setores, etc.)
+    restart: unless-stopped
