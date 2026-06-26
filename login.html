@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar · Portal Sillion</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{ --accent:#6366F1; --accent-2:#4F46E5; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:linear-gradient(135deg,#0F172A 0%,#0c3b39 60%,#0F3460 100%);position:relative;overflow:hidden}
+body::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:420px;background:radial-gradient(ellipse,rgba(99,102,241,.20) 0%,transparent 70%);pointer-events:none}
+.card{position:relative;z-index:1;width:100%;max-width:380px;background:#fff;border-radius:20px;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.brand{display:flex;align-items:center;gap:11px;justify-content:center;margin-bottom:24px}
+.brand .mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(99,102,241,.4)}
+.brand b{font-size:19px;font-weight:800;color:#0F172A;letter-spacing:-.3px}
+.brand span{display:block;font-size:11px;color:#64748B;font-weight:500}
+h1{font-size:18px;font-weight:800;color:#0F172A;text-align:center;margin-bottom:4px}
+.sub{font-size:13px;color:#64748B;text-align:center;margin-bottom:24px}
+label{display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:7px}
+.field{position:relative;margin-bottom:18px}
+input{width:100%;padding:13px 14px;border:1px solid #E2E8F0;border-radius:12px;font-family:inherit;font-size:15px;color:#0F172A;transition:.15s}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+button{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 6px 20px rgba(99,102,241,.4);transition:.2s}
+button:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(99,102,241,.5)}
+.err{display:none;background:#FEF2F2;color:#DC2626;font-size:13px;font-weight:600;padding:10px 12px;border-radius:10px;margin-bottom:16px;text-align:center}
+.err.show{display:block}
+.foot{text-align:center;font-size:11px;color:#94A3B8;margin-top:20px}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+      <div><b>SILLION</b><span>Portal de Automações</span></div>
+    </div>
+    <h1>Acesso restrito</h1>
+    <p class="sub">Digite a senha para entrar no portal.</p>
+    <div class="err" id="err">Senha incorreta. Tente novamente.</div>
+    <form id="form" autocomplete="off">
+      <div class="field">
+        <label for="pwd">Senha</label>
+        <input type="password" id="pwd" placeholder="••••••••" autofocus>
+      </div>
+      <button type="submit">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Entrar
+      </button>
+    </form>
+    <p class="foot">Sillion · uso interno</p>
+  </div>
+
+<script>
+/* ===== SENHA DO PORTAL — troque aqui ===== */
+const SENHA = "sillion2026";
+/* ========================================= */
+
+const form = document.getElementById('form');
+const pwd  = document.getElementById('pwd');
+const err  = document.getElementById('err');
+
+// se já está logado, vai direto pro portal
+if (localStorage.getItem('sillion_auth') === 'ok') location.replace('index.html');
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  if (pwd.value === SENHA){
+    localStorage.setItem('sillion_auth','ok');
+    const alvo = new URLSearchParams(location.search).get('next') || 'index.html';
+    location.replace(alvo);
+  } else {
+    err.classList.add('show');
+    pwd.value = '';
+    pwd.focus();
+  }
+});
+</script>
+</body>
+</html>
