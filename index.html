@@ -74,6 +74,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;display:fle
 .amber::before{background:#F59E0B}  .amber .ic{background:linear-gradient(135deg,#F59E0B,#D97706)}  .amber .tag{color:#B45309;background:rgba(245,158,11,.12)}
 .red::before{background:#EF4444}    .red .ic{background:linear-gradient(135deg,#EF4444,#DC2626)}    .red .tag{color:#DC2626;background:rgba(239,68,68,.1)}
 .purple::before{background:#8B5CF6} .purple .ic{background:linear-gradient(135deg,#8B5CF6,#7C3AED)} .purple .tag{color:#7C3AED;background:rgba(139,92,246,.1)}
+.teal::before{background:#0D9488} .teal .ic{background:linear-gradient(135deg,#0D9488,#0F766E)} .teal .tag{color:#0F766E;background:rgba(13,148,136,.1)}
 .tag.off{color:#B45309;background:rgba(245,158,11,.12)}
 .card.soon{cursor:not-allowed;opacity:.75}
 
@@ -102,6 +103,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;display:fle
     <a href="fiscal.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="tip">Fiscal</span></a>
     <a href="faturamento.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><path d="M9 14h6"/></svg><span class="tip">Faturamento</span></a>
     <a href="departamento_pessoal.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><span class="tip">Departamento Pessoal</span></a>
+    <span class="rail-sep"></span>
+    <a href="dados.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg><span class="tip">Dados</span></a>
     <a href="#" style="opacity:.5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg><span class="tip">Contabilidade (em breve)</span></a>
   </nav>
 
@@ -151,7 +154,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;display:fle
           <div class="foot"><span class="tag">Ativo</span><div class="arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
         </a>
 
-        <span class="card green soon">
+        <a class="card teal" href="dados.html">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></div>
+        <h3>Dados</h3>
+        <div class="desc">Consulta de notas fiscais no banco: filtrar, pesquisar e baixar Nota, XML, Boleto e Medição.</div>
+        <div class="foot"><span class="tag">Ativo</span><div class="arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+      </a>
+
+      <span class="card green soon">
           <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
           <h3>Contabilidade</h3>
           <div class="desc">Em desenvolvimento.</div>

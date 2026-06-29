@@ -1,0 +1,67 @@
+{
+  "name": "file_proxy_b64",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "file-b64",
+        "responseMode": "responseNode",
+        "options": { "allowedOrigins": "*" }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 0],
+      "id": "wh-fileb64",
+      "name": "Webhook file-b64",
+      "webhookId": "file-b64-proxy"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.query.url }}",
+        "options": {
+          "response": {
+            "response": { "responseFormat": "file", "outputPropertyName": "data" }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [220, 0],
+      "id": "http-file",
+      "name": "Baixar arquivo"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "destinationKey": "b64"
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [440, 0],
+      "id": "extract-b64",
+      "name": "Para base64"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"name\": ($('Webhook file-b64').item.json.query.name || 'arquivo'), \"b64\": $json.b64 } }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [ { "name": "Access-Control-Allow-Origin", "value": "*" } ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [660, 0],
+      "id": "resp-file",
+      "name": "Responder"
+    }
+  ],
+  "connections": {
+    "Webhook file-b64": { "main": [[{ "node": "Baixar arquivo", "type": "main", "index": 0 }]] },
+    "Baixar arquivo": { "main": [[{ "node": "Para base64", "type": "main", "index": 0 }]] },
+    "Para base64": { "main": [[{ "node": "Responder", "type": "main", "index": 0 }]] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1" }
+}

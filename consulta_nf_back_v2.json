@@ -1,0 +1,100 @@
+{
+  "name": "consulta_nf_back",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT v.nIdNf, v.cNumNFSe, v.cNumOs, v.cDataEmissao, v.cCNPJCliente, v.cliente_razao, v.emp, v.nValorNFSe, v.pdf_url, v.xml_url, v.cliente_cont_id, b.boleto_cLinkBoleto, b.boleto_dDtVenc, b.boleto_nValor FROM kvm4_db.vw_NF_Cliente v LEFT JOIN kvm4_db.Boleto b ON b.nIdNf = v.nIdNf ORDER BY v.cDataEmissao DESC LIMIT 500",
+        "options": {}
+      },
+      "id": "1e623676-03d9-443b-a4f8-a64cd41e5b1f",
+      "name": "Consulta notas",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [336, -112],
+      "credentials": {
+        "mySql": { "id": "XCvr6ZAkzl0C3MMu", "name": "MySQL faturamento" }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseHeaders": {
+            "entries": [ { "name": "Access-Control-Allow-Origin", "value": "*" } ]
+          }
+        }
+      },
+      "id": "138b8b18-6335-4cac-b21f-7a8fb7d8ba36",
+      "name": "Responder notas",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [736, -112]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT filename, mime_type, file_base64 FROM kvm4_db.Medicoes WHERE cont_id = $1 ORDER BY id_medicao DESC LIMIT 1",
+        "options": { "queryReplacement": "={{ $json.query.cont_id }}" }
+      },
+      "id": "8ebac2fa-e446-4f2e-88e9-8ed7aecc7d20",
+      "name": "Busca medicao",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [336, 208],
+      "credentials": {
+        "mySql": { "id": "XCvr6ZAkzl0C3MMu", "name": "MySQL faturamento" }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [ { "name": "Access-Control-Allow-Origin", "value": "*" } ]
+          }
+        }
+      },
+      "id": "0d702709-09ea-46fd-a3d1-1ae8f3d1261b",
+      "name": "Responder medicao",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [752, 208]
+    },
+    {
+      "parameters": {
+        "path": "739f6ddb-7d6c-4346-8ad3-ac275b91d64b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 208],
+      "id": "adfccc85-8104-4863-91c2-9dfc68538017",
+      "name": "Webhook /medicao",
+      "webhookId": "739f6ddb-7d6c-4346-8ad3-ac275b91d64b"
+    },
+    {
+      "parameters": {
+        "path": "7d09ce29-a724-4470-a952-32df1755b41a",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-16, -112],
+      "id": "e4caa350-7634-4ca5-ab66-2ce4f7358a0d",
+      "name": "Webhook /nota",
+      "webhookId": "7d09ce29-a724-4470-a952-32df1755b41a"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Consulta notas": { "main": [[{ "node": "Responder notas", "type": "main", "index": 0 }]] },
+    "Busca medicao": { "main": [[{ "node": "Responder medicao", "type": "main", "index": 0 }]] },
+    "Webhook /nota": { "main": [[{ "node": "Consulta notas", "type": "main", "index": 0 }]] },
+    "Webhook /medicao": { "main": [[{ "node": "Busca medicao", "type": "main", "index": 0 }]] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1", "binaryMode": "separate" },
+  "meta": { "templateCredsSetupCompleted": true }
+}
