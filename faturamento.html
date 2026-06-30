@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>if(localStorage.getItem('sillion_auth')!=='ok'){location.replace('login.html'+location.search);}</script>
+
 <title>Faturamento · Portal Sillion</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -111,7 +111,7 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
   <div class="tb-logo"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> SILLION</div>
   <span class="tb-sep"></span>
   <span class="tb-sub">Portal de Automações</span>
-  <div class="tb-right"><span class="d"></span> Online <a href="#" onclick="localStorage.removeItem(&#39;sillion_auth&#39;);location.replace(&#39;login.html&#39;);return false;" style="margin-left:14px;color:#CFEDEA;text-decoration:none;font-weight:600">Sair</a></div>
+  <div class="tb-right"><span class="d"></span> Online <a href="/auth/logout" style="margin-left:14px;color:#CFEDEA;text-decoration:none;font-weight:600">Sair</a></div>
 </header>
 
 <div class="shell">
@@ -156,16 +156,16 @@ body.maxed .embed-wrap{position:fixed;inset:0;z-index:999;height:100vh!important
     <section class="panel" id="faturaros">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Faturar por OS</h1><p class="p-sub">Extrai os dados do banco de dados de faturamento e lança no Omie via API.</p></div>
       <div class="embed-wrap">
-        <div class="embed-bar"><span class="u">🔗 187.77.251.91:8500/faturar</span><button class="embed-max" onclick="toggleMax(this)">Expandir ⤢</button><a class="embed-open" href="http://187.77.251.91:8500/faturar/" target="_blank" rel="noopener">Abrir em nova aba ↗</a></div>
-        <iframe data-src="http://187.77.251.91:8500/faturar/" loading="lazy"></iframe>
+        <div class="embed-bar"><span class="u">🔗 /faturar</span><button class="embed-max" onclick="toggleMax(this)">Expandir ⤢</button><a class="embed-open" href="/faturar/" target="_blank" rel="noopener">Abrir em nova aba ↗</a></div>
+        <iframe data-src="/faturar/" loading="lazy"></iframe>
       </div>
     </section>
 
     <section class="panel" id="download">
       <div class="p-head"><p class="p-eyebrow">Automação</p><h1 class="p-title">Download de NFSe e XML</h1><p class="p-sub">Faz o download automático dos arquivos de faturamento.</p></div>
       <div class="embed-wrap">
-        <div class="embed-bar"><span class="u">🔗 187.77.251.91:8500/download</span><button class="embed-max" onclick="toggleMax(this)">Expandir ⤢</button><a class="embed-open" href="http://187.77.251.91:8500/download/" target="_blank" rel="noopener">Abrir em nova aba ↗</a></div>
-        <iframe data-src="http://187.77.251.91:8500/download/" loading="lazy"></iframe>
+        <div class="embed-bar"><span class="u">🔗 /download</span><button class="embed-max" onclick="toggleMax(this)">Expandir ⤢</button><a class="embed-open" href="/download/" target="_blank" rel="noopener">Abrir em nova aba ↗</a></div>
+        <iframe data-src="/download/" loading="lazy"></iframe>
       </div>
     </section>
 

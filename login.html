@@ -39,10 +39,10 @@ button:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(99,102,241,.
     <h1>Acesso restrito</h1>
     <p class="sub">Digite a senha para entrar no portal.</p>
     <div class="err" id="err">Senha incorreta. Tente novamente.</div>
-    <form id="form" autocomplete="off">
+    <form method="POST" action="/auth/login" autocomplete="off">
       <div class="field">
         <label for="pwd">Senha</label>
-        <input type="password" id="pwd" placeholder="••••••••" autofocus>
+        <input type="password" id="pwd" name="pwd" placeholder="••••••••" autofocus required>
       </div>
       <button type="submit">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -51,31 +51,8 @@ button:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(99,102,241,.
     </form>
     <p class="foot">Sillion · uso interno</p>
   </div>
-
 <script>
-/* ===== SENHA DO PORTAL — troque aqui ===== */
-const SENHA = "sillion2026";
-/* ========================================= */
-
-const form = document.getElementById('form');
-const pwd  = document.getElementById('pwd');
-const err  = document.getElementById('err');
-
-// se já está logado, vai direto pro portal
-if (localStorage.getItem('sillion_auth') === 'ok') location.replace('index.html');
-
-form.addEventListener('submit', function(e){
-  e.preventDefault();
-  if (pwd.value === SENHA){
-    localStorage.setItem('sillion_auth','ok');
-    const alvo = new URLSearchParams(location.search).get('next') || 'index.html';
-    location.replace(alvo);
-  } else {
-    err.classList.add('show');
-    pwd.value = '';
-    pwd.focus();
-  }
-});
+  if(new URLSearchParams(location.search).get('erro')) document.getElementById('err').classList.add('show');
 </script>
 </body>
 </html>
