@@ -4,7 +4,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT v.nIdNf, v.cNumNFSe, v.cNumOs, v.cDataEmissao, v.cCNPJCliente, v.cliente_razao, v.emp, v.nValorNFSe, v.pdf_url, v.xml_url, v.cliente_cont_id, b.boleto_cLinkBoleto, b.boleto_dDtVenc, b.boleto_nValor FROM kvm4_db.vw_NF_Cliente v LEFT JOIN kvm4_db.Boleto b ON b.nIdNf = v.nIdNf ORDER BY v.cDataEmissao DESC LIMIT 500",
+        "query": "SELECT v.nIdNf, v.cNumNFSe, v.cNumOs, v.cDataEmissao, v.cCNPJCliente, v.cliente_razao, v.nf_razao, v.emp, v.nValorNFSe, v.pdf_url, v.xml_url, v.cliente_cont_id, b.boleto_cLinkBoleto, b.boleto_dDtVenc, b.boleto_nValor FROM kvm4_db.vw_NF_Cliente v LEFT JOIN kvm4_db.Boleto b ON b.nIdNf = v.nIdNf ORDER BY v.cDataEmissao DESC LIMIT 500",
         "options": {}
       },
       "id": "1e623676-03d9-443b-a4f8-a64cd41e5b1f",

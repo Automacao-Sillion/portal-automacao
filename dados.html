@@ -52,6 +52,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(-
 .btn-lote{display:none;align-items:center;gap:7px;padding:10px 16px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap}
 .btn-lote.show{display:inline-flex}
 .btn-lote:hover{filter:brightness(1.05)}
+.lote-wrap{position:relative}
+.lote-menu{display:none;position:absolute;right:0;top:46px;z-index:40;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:12px;min-width:210px}
+.lote-menu.open{display:block}
+.lote-menu .lote-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-soft);margin-bottom:8px}
+.lote-menu label{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 2px;cursor:pointer}
+.lote-menu .tipoChk{width:15px;height:15px;accent-color:var(--accent)}
+.btn-zip{width:100%;margin-top:10px;padding:9px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
+.btn-zip:hover{filter:brightness(1.05)}
+.btn-zip:disabled{opacity:.6;cursor:not-allowed}
+.lote-status{font-size:11.5px;color:var(--txt-soft);margin-top:8px;min-height:14px}
 .summary{font-size:12.5px;color:var(--txt-soft);margin-bottom:12px}
 .summary b{color:var(--accent-deep)}
 .tablebox{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:auto;max-height:62vh}
@@ -114,7 +124,21 @@ tbody tr:hover{background:var(--accent-soft)}
         <label>De</label><input type="date" id="dataDe">
         <label>Até</label><input type="date" id="dataAte">
       </div>
-      <span id="selInfo" class="summary" style="margin:0"></span>
+      <div class="lote-wrap" id="loteWrap" style="display:none">
+        <button class="btn-lote show" id="btnLote" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Baixar em lote (<span id="selCount">0</span>)
+        </button>
+        <div class="lote-menu" id="loteMenu">
+          <div class="lote-title">O que incluir no ZIP</div>
+          <label><input type="checkbox" class="tipoChk" value="pdf" checked> Nota (PDF)</label>
+          <label><input type="checkbox" class="tipoChk" value="xml" checked> XML</label>
+          <label><input type="checkbox" class="tipoChk" value="boleto" checked> Boleto</label>
+          <label><input type="checkbox" class="tipoChk" value="medicao" checked> Medição</label>
+          <button class="btn-zip" id="btnZip" type="button">Gerar ZIP</button>
+          <div class="lote-status" id="loteStatus"></div>
+        </div>
+      </div>
     </div>
     <div class="summary" id="summary"></div>
     <div class="tablebox">
@@ -136,6 +160,7 @@ tbody tr:hover{background:var(--accent-soft)}
 /* ===== Webhooks do n8n (KVM8) ===== */
 const NOTAS_URL   = 'https://n8n.srv1776004.hstgr.cloud/webhook/7d09ce29-a724-4470-a952-32df1755b41a';
 const MEDICAO_URL = 'https://n8n.srv1776004.hstgr.cloud/webhook/739f6ddb-7d6c-4346-8ad3-ac275b91d64b';
+const PROXY_URL   = 'https://n8n.srv1776004.hstgr.cloud/webhook/file-b64';
 
 const brl=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const dataBR=s=>{const d=String(s||'').slice(0,10).split('-');return d.length===3?`${d[2]}/${d[1]}/${d[0]}`:String(s||'');};
@@ -164,6 +189,20 @@ async function baixarMedicao(contId){
 }
 window._medicao=baixarMedicao;
 
+// Boleto agora vem em base64 na coluna boleto_cLinkBoleto
+function baixarBoleto(nIdNf){
+  const n=DADOS.find(x=>String(x.nIdNf)===String(nIdNf));
+  if(!n||!n.boleto_cLinkBoleto){ alert('Boleto não disponível para esta nota.'); return; }
+  try{
+    const raw=String(n.boleto_cLinkBoleto).replace(/^data:[^;]+;base64,/,'');
+    const b=Uint8Array.from(atob(raw),c=>c.charCodeAt(0));
+    const u=URL.createObjectURL(new Blob([b],{type:'application/pdf'}));
+    const a=document.createElement('a'); a.href=u; a.download='NF-'+(n.cNumNFSe||n.nIdNf)+'-boleto.pdf'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(u),1500);
+  }catch(e){ alert('Erro ao abrir o boleto: '+e.message); }
+}
+window._boleto=baixarBoleto;
+
 let DADOS=[], empAtiva='', selec=new Set();
 const tbody=document.getElementById('tbody'), elBusca=document.getElementById('search');
 
@@ -176,11 +215,11 @@ function filtradas(){
     if(ate && d>ate) return false;
     if(empAtiva && String(n.emp||'').toLowerCase()!==empAtiva) return false;
     if(!q) return true;
-    const campos=[n.cNumNFSe,n.cNumOs,n.cliente_razao,n.cCNPJCliente,dataBR(n.cDataEmissao),String(n.nValorNFSe),brl(n.nValorNFSe)];
+    const campos=[n.cNumNFSe,n.cNumOs,n.cliente_razao,n.nf_razao,n.cCNPJCliente,dataBR(n.cDataEmissao),String(n.nValorNFSe),brl(n.nValorNFSe)];
     return campos.some(c=>semAc(String(c||'').toLowerCase()).includes(q));
   });
 }
-function cliente(n){ return n.cliente_razao ? n.cliente_razao : `<span class="cli-cnpj">${n.cCNPJCliente||'—'}</span>`; }
+function cliente(n){ const nome=n.cliente_razao || n.nf_razao; return nome ? nome : `<span class="cli-cnpj">${n.cCNPJCliente||'—'}</span>`; }
 function acaoLink(url,label,cls){ return url ? `<a class="mini ${cls||''}" href="${url}" target="_blank" rel="noopener">${label}</a>` : `<button class="mini ${cls||''}" disabled>${label}</button>`; }
 
 function render(){
@@ -196,7 +235,7 @@ function render(){
     <td><div class="acts">
       ${acaoLink(n.pdf_url,'Nota')}
       ${acaoLink(n.xml_url,'XML')}
-      ${acaoLink(n.boleto_cLinkBoleto,'Boleto','boleto')}
+      ${n.boleto_cLinkBoleto?`<button class="mini boleto" onclick="window._boleto('${n.nIdNf}')">Boleto</button>`:`<button class="mini boleto" disabled>Boleto</button>`}
       ${n.cliente_cont_id?`<button class="mini" onclick="window._medicao('${n.cliente_cont_id}')">Medição</button>`:`<button class="mini" disabled title="sem cont_id">Medição</button>`}
     </div></td></tr>`).join('');
   document.getElementById('empty').style.display=lista.length?'none':'block';
@@ -205,10 +244,61 @@ function render(){
   tbody.querySelectorAll('.row').forEach(c=>c.addEventListener('change',e=>{const id=e.target.dataset.id;e.target.checked?selec.add(id):selec.delete(id);atualizaLote();}));
   document.getElementById('chkAll').checked=lista.length>0 && lista.every(n=>selec.has(String(n.nIdNf)));
 }
-function atualizaLote(){const i=document.getElementById('selInfo');if(i)i.textContent=selec.size?(selec.size+' selecionada(s)'):'';}
+function atualizaLote(){const w=document.getElementById('loteWrap');const c=document.getElementById('selCount');if(c)c.textContent=selec.size;if(w)w.style.display=selec.size>0?'block':'none';if(!selec.size){const m=document.getElementById('loteMenu');if(m)m.classList.remove('open');}}
 document.getElementById('chkAll').addEventListener('change',e=>{const lista=filtradas();if(e.target.checked)lista.forEach(n=>selec.add(String(n.nIdNf)));else lista.forEach(n=>selec.delete(String(n.nIdNf)));render();atualizaLote();});
-// Download em lote (ZIP) temporariamente desativado — aguardando proxy /file-b64 no n8n.
-// A seleção de notas continua ativa; o botão de lote fica oculto por enquanto.
+// ===== Download em lote: n8n devolve base64 (sem CORS), front monta o ZIP =====
+async function getB64viaProxy(url){
+  const r=await fetch(PROXY_URL+'?url='+encodeURIComponent(url),{cache:'no-store'});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const j=await r.json(); const row=Array.isArray(j)?j[0]:j;
+  if(!row||!row.b64) throw new Error('vazio'); return row.b64;
+}
+async function getMedicao(contId){
+  const r=await fetch(MEDICAO_URL+'?cont_id='+encodeURIComponent(contId),{cache:'no-store'});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const j=await r.json(); const row=Array.isArray(j)?j[0]:j;
+  return (row&&row.file_base64)?{b64:row.file_base64,name:row.filename||('medicao-'+contId+'.xlsx')}:null;
+}
+async function gerarZip(){
+  const tipos=[...document.querySelectorAll('.tipoChk:checked')].map(c=>c.value);
+  if(!tipos.length){ alert('Marque ao menos um tipo (Nota, XML, Boleto ou Medição).'); return; }
+  const sel=DADOS.filter(n=>selec.has(String(n.nIdNf)));
+  if(!sel.length) return;
+  const st=document.getElementById('loteStatus'); const btn=document.getElementById('btnZip');
+  btn.disabled=true;
+  // monta a lista de tarefas (cada arquivo a incluir)
+  const tasks=[];
+  for(const n of sel){
+    const base='NF-'+(n.cNumNFSe||n.nIdNf);
+    if(tipos.includes('pdf') && n.pdf_url)            tasks.push({name:base+'.pdf',        run:()=>getB64viaProxy(n.pdf_url)});
+    if(tipos.includes('xml') && n.xml_url)            tasks.push({name:base+'.xml',        run:()=>getB64viaProxy(n.xml_url)});
+    if(tipos.includes('boleto') && n.boleto_cLinkBoleto) tasks.push({name:base+'-boleto.pdf', run:()=>Promise.resolve(String(n.boleto_cLinkBoleto).replace(/^data:[^;]+;base64,/,''))});
+    if(tipos.includes('medicao') && n.cliente_cont_id)   tasks.push({name:base, medicao:true, run:()=>getMedicao(n.cliente_cont_id)});
+  }
+  if(!tasks.length){ st.textContent='Nada a baixar para os tipos escolhidos.'; btn.disabled=false; return; }
+  const zip=new JSZip(); let ok=0, fail=0, done=0; const total=tasks.length, CONC=6; let idx=0;
+  async function worker(){
+    while(idx<tasks.length){
+      const t=tasks[idx++];
+      try{
+        const res=await t.run();
+        if(t.medicao){ if(res && res.b64){ zip.file(t.name+'-'+res.name, res.b64, {base64:true}); ok++; } else fail++; }
+        else { zip.file(t.name, res, {base64:true}); ok++; }
+      }catch(e){ fail++; }
+      done++; st.textContent='Baixando '+done+'/'+total+'…';
+    }
+  }
+  await Promise.all(Array.from({length:Math.min(CONC,tasks.length)}, worker));
+  if(ok===0){ st.textContent='Nada baixado — verifique se o webhook /file-b64 está ativo no n8n.'; btn.disabled=false; return; }
+  st.textContent='Compactando…';
+  const blob=await zip.generateAsync({type:'blob'});
+  const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download='notas_'+new Date().toISOString().slice(0,10)+'.zip'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000);
+  st.textContent='ZIP gerado: '+ok+' arquivo(s)'+(fail?(' · '+fail+' falha(s)'):'')+'.';
+  btn.disabled=false;
+}
+document.getElementById('btnLote').addEventListener('click',e=>{e.stopPropagation();document.getElementById('loteMenu').classList.toggle('open');});
+document.getElementById('btnZip').addEventListener('click',gerarZip);
+document.addEventListener('click',e=>{ if(!e.target.closest('#loteWrap')) document.getElementById('loteMenu').classList.remove('open'); });
 document.querySelectorAll('#empresaSeg button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#empresaSeg button').forEach(x=>x.classList.remove('active'));b.classList.add('active');empAtiva=b.dataset.emp;render();}));
 elBusca.addEventListener('input',render);
 document.getElementById('dataDe').addEventListener('change',render);
