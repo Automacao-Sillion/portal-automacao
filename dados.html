@@ -174,16 +174,18 @@ async function carregarDados(){
 }
 
 // Medição: busca o base64 por cont_id e baixa o arquivo
-async function baixarMedicao(contId){
-  if(!contId){ alert('Esta nota não tem cont_id para localizar a medição.'); return; }
+async function baixarMedicao(idMedicao){
+  if(!idMedicao){ alert('Esta nota não tem medição vinculada.'); return; }
   try{
-    const r=await fetch(MEDICAO_URL+'?cont_id='+encodeURIComponent(contId),{cache:'no-store'});
+    const r=await fetch(MEDICAO_URL+'?id='+encodeURIComponent(idMedicao),{cache:'no-store'});
     if(!r.ok) throw new Error('HTTP '+r.status);
-    const j=await r.json(); const row=Array.isArray(j)?j[0]:j;
-    if(!row || !row.file_base64) throw new Error('medição não encontrada para este cliente');
+    const txt=await r.text();
+    if(!txt.trim()) throw new Error('o webhook não retornou dados para a medição '+idMedicao+' (confira a query: WHERE id_medicao = $1)');
+    const j=JSON.parse(txt); const row=Array.isArray(j)?j[0]:j;
+    if(!row || !row.file_base64) throw new Error('medição não encontrada');
     const b=Uint8Array.from(atob(row.file_base64),c=>c.charCodeAt(0));
     const u=URL.createObjectURL(new Blob([b],{type:row.mime_type||'application/octet-stream'}));
-    const a=document.createElement('a'); a.href=u; a.download=row.filename||('medicao-'+contId+'.xlsx'); a.click();
+    const a=document.createElement('a'); a.href=u; a.download=row.filename||('medicao-'+idMedicao+'.xlsx'); a.click();
     setTimeout(()=>URL.revokeObjectURL(u),1500);
   }catch(e){ alert('Erro ao baixar a medição: '+e.message); }
 }
@@ -236,7 +238,7 @@ function render(){
       ${acaoLink(n.pdf_url,'Nota')}
       ${acaoLink(n.xml_url,'XML')}
       ${n.boleto_cLinkBoleto?`<button class="mini boleto" onclick="window._boleto('${n.nIdNf}')">Boleto</button>`:`<button class="mini boleto" disabled>Boleto</button>`}
-      ${n.cliente_cont_id?`<button class="mini" onclick="window._medicao('${n.cliente_cont_id}')">Medição</button>`:`<button class="mini" disabled title="sem cont_id">Medição</button>`}
+      ${n.medicao_id?`<button class="mini" onclick="window._medicao('${n.medicao_id}')">Medição</button>`:`<button class="mini" disabled title="sem medição vinculada">Medição</button>`}
     </div></td></tr>`).join('');
   document.getElementById('empty').style.display=lista.length?'none':'block';
   const total=lista.reduce((s,n)=>s+Number(n.nValorNFSe||0),0);
@@ -253,11 +255,12 @@ async function getB64viaProxy(url){
   const j=await r.json(); const row=Array.isArray(j)?j[0]:j;
   if(!row||!row.b64) throw new Error('vazio'); return row.b64;
 }
-async function getMedicao(contId){
-  const r=await fetch(MEDICAO_URL+'?cont_id='+encodeURIComponent(contId),{cache:'no-store'});
+async function getMedicao(idMedicao){
+  const r=await fetch(MEDICAO_URL+'?id='+encodeURIComponent(idMedicao),{cache:'no-store'});
   if(!r.ok) throw new Error('HTTP '+r.status);
-  const j=await r.json(); const row=Array.isArray(j)?j[0]:j;
-  return (row&&row.file_base64)?{b64:row.file_base64,name:row.filename||('medicao-'+contId+'.xlsx')}:null;
+  const txt=await r.text(); if(!txt.trim()) return null;
+  const j=JSON.parse(txt); const row=Array.isArray(j)?j[0]:j;
+  return (row&&row.file_base64)?{b64:row.file_base64,name:row.filename||('medicao-'+idMedicao+'.xlsx')}:null;
 }
 async function gerarZip(){
   const tipos=[...document.querySelectorAll('.tipoChk:checked')].map(c=>c.value);
@@ -273,7 +276,7 @@ async function gerarZip(){
     if(tipos.includes('pdf') && n.pdf_url)            tasks.push({name:base+'.pdf',        run:()=>getB64viaProxy(n.pdf_url)});
     if(tipos.includes('xml') && n.xml_url)            tasks.push({name:base+'.xml',        run:()=>getB64viaProxy(n.xml_url)});
     if(tipos.includes('boleto') && n.boleto_cLinkBoleto) tasks.push({name:base+'-boleto.pdf', run:()=>Promise.resolve(String(n.boleto_cLinkBoleto).replace(/^data:[^;]+;base64,/,''))});
-    if(tipos.includes('medicao') && n.cliente_cont_id)   tasks.push({name:base, medicao:true, run:()=>getMedicao(n.cliente_cont_id)});
+    if(tipos.includes('medicao') && n.medicao_id)   tasks.push({name:base, medicao:true, run:()=>getMedicao(n.medicao_id)});
   }
   if(!tasks.length){ st.textContent='Nada a baixar para os tipos escolhidos.'; btn.disabled=false; return; }
   const zip=new JSZip(); let ok=0, fail=0, done=0; const total=tasks.length, CONC=6; let idx=0;
